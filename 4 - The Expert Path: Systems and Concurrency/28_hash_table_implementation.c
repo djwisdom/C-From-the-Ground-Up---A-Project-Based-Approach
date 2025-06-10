@@ -1,6 +1,6 @@
 /**
  * @file 28_hash_table_implementation.c
- * @author dunamismax (enhanced by Gemini)
+ * @author dunamismax 
  * @date 2025-06-10
  *
  * @brief An expert-level project: Building a hash table from scratch.

@@ -1,6 +1,6 @@
 /**
  * @file 27_build_your_own_grep.c
- * @author dunamismax (enhanced by Gemini)
+ * @author dunamismax 
  * @date 2025-06-10
  *
  * @brief An expert-level project: A simplified version of the 'grep' utility.

@@ -1,6 +1,6 @@
 /**
  * @file 29_tiny_shell.c
- * @author dunamismax (enhanced by Gemini)
+ * @author dunamismax 
  * @date 2025-06-10
  *
  * @brief An expert-level project: A tiny command-line shell.

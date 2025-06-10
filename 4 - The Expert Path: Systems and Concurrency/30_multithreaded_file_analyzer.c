@@ -1,6 +1,6 @@
 /**
  * @file 30_multithreaded_file_analyzer.c
- * @author dunamismax (enhanced by Gemini)
+ * @author dunamismax 
  * @date 2025-06-10
  *
  * @brief An expert-level project: A concurrent file analyzer using multiple threads.

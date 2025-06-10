@@ -1,6 +1,6 @@
 /**
  * @file 26_simple_socket_client.c
- * @author dunamismax (enhanced by Gemini)
+ * @author dunamismax 
  * @date 2025-06-10
  *
  * @brief An expert-level project: A simple TCP client.
