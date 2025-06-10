@@ -114,7 +114,7 @@ The final project (`25_simple_text_editor.c`) is a culmination of everything lea
 *   Load a document from a file when it starts.
 *   Save the current text buffer back to the file.
 
-![GIF of the text editor in action](https://i.imgur.com/example.gif)  <!-- Placeholder: Replace with an actual GIF of your editor! -->
+![Screenshot of the text editor](https://imgur.com/a/iNTZtxO)
 
 **To run the editor:**
 ```sh
