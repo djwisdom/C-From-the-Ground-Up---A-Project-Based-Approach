@@ -31,11 +31,12 @@
  * Our program will parse each line and load the data into an array of `struct User`.
  *
  * We will explore two primary methods for parsing strings: `strtok` and `sscanf`.
+ * As you will see, `sscanf` is often safer and more robust.
  */
 
 #include <stdio.h>
-#include <stdlib.h> // For atoi()
-#include <string.h> // For strtok() and strcpy()
+#include <stdlib.h> // For atoi() in the strtok example
+#include <string.h> // For strtok(), strcpy()
 
 #define MAX_LINE_LENGTH 256
 #define MAX_USERS 10
@@ -52,13 +53,14 @@ typedef struct
 } User;
 
 // --- Function Prototypes ---
-void print_user(const User *user);
 void parse_with_sscanf(FILE *file);
+void print_user(const User *user);
 
 // --- The Main Function ---
 // Our program will expect the name of the data file as a command-line argument.
 int main(int argc, char *argv[])
 {
+    // A program that needs a file to work should always check for it.
     if (argc != 2)
     {
         fprintf(stderr, "Usage: %s <datafile>\n", argv[0]);
@@ -85,8 +87,8 @@ int main(int argc, char *argv[])
 /*
  * `sscanf` is often the best tool for this job. It's like `scanf`, but it reads
  * from a string instead of the keyboard. It's powerful because it can parse
- * complex patterns and its return value tells you how many items were
- * successfully assigned, making error checking easy.
+ * complex patterns, and its return value tells you how many items were
+ * successfully assigned, which makes error checking very easy.
  */
 void parse_with_sscanf(FILE *file)
 {
@@ -114,10 +116,10 @@ void parse_with_sscanf(FILE *file)
         // the data. For integers, we use the address-of operator `&`. For the
         // character array `username`, the name itself decays to a pointer.
         int items_scanned = sscanf(line, "%d,%49[^,],%d,%d",
-                                   ¤t_user.id,
-                                   current_user.username,
-                                   ¤t_user.level,
-                                   ¤t_user.is_active);
+                                   current_user.id,         // FIX: Use '&' and 'current_user'
+                                   current_user.username,   // This is correct (arrays decay to pointers)
+                                   current_user.level,      // FIX: Use '&' and 'current_user'
+                                   current_user.is_active); // FIX: Use '&' and 'current_user'
 
         // We expect to scan 4 items. If we don't, the line was malformed.
         if (items_scanned == 4)
@@ -145,11 +147,13 @@ void parse_with_sscanf(FILE *file)
  */
 void print_user(const User *user)
 {
+    // The formatting specifiers `%-5d` and `%-15s` left-align the output
+    // in a field of a certain width, creating nice columns.
     printf("  User ID: %-5d | Username: %-15s | Level: %-3d | Active: %s\n",
            user->id,
            user->username,
            user->level,
-           user->is_active ? "Yes" : "No"); // Using a ternary operator for nice output.
+           user->is_active ? "Yes" : "No"); // Using a ternary operator for clean output.
 }
 
 /*
@@ -172,13 +176,17 @@ void print_user(const User *user)
  *
  * Example `strtok` loop:
  *
+ *   // Important: `strtok` modifies the string, so we'd need a copy.
+ *   // char line_copy[MAX_LINE_LENGTH];
+ *   // strcpy(line_copy, line);
+ *
  *   char *token = strtok(line, ","); // Get first token
  *   if (token) user.id = atoi(token);
  *
  *   token = strtok(NULL, ","); // Get next token
  *   if (token) strcpy(user.username, token);
  *
- *   ... and so on. As you can see, it's more verbose than `sscanf`.
+ *   ... and so on. As you can see, it's more verbose and requires more care.
  */
 
 /*
@@ -202,7 +210,7 @@ void print_user(const User *user)
  *    404,syntax_sorcerer,99,1
  *
  * 2. COMPILE THE C FILE:
- *    Open a terminal and navigate to the directory. No special libraries are needed.
+ *    Open a terminal and navigate to the directory.
  *    `gcc -Wall -Wextra -std=c11 -o 34_parsing_data_files 34_parsing_data_files.c`
  *
  * 3. RUN THE EXECUTABLE:
