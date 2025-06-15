@@ -7,11 +7,12 @@
   This course uses a unique, hands-on teaching method: <b>the lesson is in the code</b>. You'll learn every concept from structured comments inside a single, runnable C file for each topic.
 </p>
 <p align="center">
+  <a href="https://github.com/dunamismax/C-From-The-Ground-Up-A-Project-Based-Journey/stargazers"><img src="https://img.shields.io/github/stars/dunamismax/C-From-The-Ground-Up-A-Project-Based-Journey?style=social" alt="GitHub Stars"></a>
   <a href="https://en.wikipedia.org/wiki/C11_(C_standard_revision)"><img src="https://img.shields.io/badge/Language-C11-blue.svg" alt="C11"></a>
   <a href="https://www.gnu.org/software/make/"><img src="https://img.shields.io/badge/Build-Make-green.svg" alt="Make"></a>
   <a href="https://en.wikipedia.org/wiki/Ncurses"><img src="https://img.shields.io/badge/UI-ncurses-9cf" alt="ncurses"></a>
-  <a href="https://github.com/dunamismax/C-From-the-Ground-Up---A-Project-Based-Journey/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
-  <a href="https://github.com/dunamismax/C-From-the-Ground-Up---A-Project-Based-Journey/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs Welcome"></a>
+  <a href="https://github.com/dunamismax/C-From-The-Ground-Up-A-Project-Based-Journey/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+  <a href="https://github.com/dunamismax/C-From-The-Ground-Up-A-Project-Based-Journey/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs Welcome"></a>
 </p>
 
 ---
@@ -52,8 +53,8 @@ Each lesson folder contains one or more source files. For most of the course, a 
 
     First, clone the repository (you only need to do this once):
     ```sh
-    git clone https://github.com/dunamismax/C-From-the-Ground-Up---A-Project-Based-Journey.git
-    cd C-From-the-Ground-Up---A-Project-Based-Journey
+    git clone https://github.com/dunamismax/C-From-The-Ground-Up-A-Project-Based-Journey.git
+    cd C-From-The-Ground-Up-A-Project-Based-Journey
     ```
 
     Then, for each lesson, navigate to its folder and use the C compiler. We highly recommend using these flags to catch common errors.
@@ -172,7 +173,7 @@ If this journey helps you become a better developer, please **give this reposito
 
 ## 🤝 Connect & Contribute
 
-This project is for the community. Have an idea for a new feature, a better way to explain a concept, or find a bug? Feel free to [open an issue](https://github.com/dunamismax/C-From-the-Ground-Up---A-Project-Based-Journey/issues) or submit a pull request!
+This project is for the community. Have an idea for a new feature, a better way to explain a concept, or find a bug? Feel free to [open an issue](https://github.com/dunamismax/C-From-The-Ground-Up-A-Project-Based-Journey/issues) or submit a pull request!
 
 Connect with the author, **dunamismax**, on:
 
