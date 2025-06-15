@@ -7,12 +7,12 @@
   This course uses a unique, hands-on teaching method: <b>the lesson is in the code</b>. You'll learn every concept from structured comments inside a single, runnable C file for each topic.
 </p>
 <p align="center">
-  <a href="https://github.com/dunamismax/C-From-The-Ground-Up-A-Project-Based-Journey/stargazers"><img src="https://img.shields.io/github/stars/dunamismax/C-From-The-Ground-Up-A-Project-Based-Journey?style=social" alt="GitHub Stars"></a>
   <a href="https://en.wikipedia.org/wiki/C11_(C_standard_revision)"><img src="https://img.shields.io/badge/Language-C11-blue.svg" alt="C11"></a>
   <a href="https://www.gnu.org/software/make/"><img src="https://img.shields.io/badge/Build-Make-green.svg" alt="Make"></a>
   <a href="https://en.wikipedia.org/wiki/Ncurses"><img src="https://img.shields.io/badge/UI-ncurses-9cf" alt="ncurses"></a>
   <a href="https://github.com/dunamismax/C-From-The-Ground-Up-A-Project-Based-Journey/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
   <a href="https://github.com/dunamismax/C-From-The-Ground-Up-A-Project-Based-Journey/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs Welcome"></a>
+  <a href="https://github.com/dunamismax/C-From-The-Ground-Up-A-Project-Based-Journey/stargazers"><img src="https://img.shields.io/github/stars/dunamismax/C-From-The-Ground-Up-A-Project-Based-Journey?style=social" alt="GitHub Stars"></a>
 </p>
 
 ---
