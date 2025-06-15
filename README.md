@@ -1,9 +1,9 @@
 # C From The Ground Up - A Project-Based Approach
 
-<p align="center">
+<p align="left">
   <b>A complete, open-source curriculum that teaches you C by building a portfolio of real-world tools and applications from scratch.</b>
 </p>
-<p align="center">
+<p align="left">
   This course uses a unique, hands-on teaching method: <b>the lesson is in the code</b>. You'll learn every concept from structured comments inside a single, runnable C file for each topic.
 </p>
 <p align="center">
