@@ -116,10 +116,10 @@ void parse_with_sscanf(FILE *file)
         // the data. For integers, we use the address-of operator `&`. For the
         // character array `username`, the name itself decays to a pointer.
         int items_scanned = sscanf(line, "%d,%49[^,],%d,%d",
-                                   current_user.id,         // FIX: Use '&' and 'current_user'
-                                   current_user.username,   // This is correct (arrays decay to pointers)
-                                   current_user.level,      // FIX: Use '&' and 'current_user'
-                                   current_user.is_active); // FIX: Use '&' and 'current_user'
+                                   current_user.id,
+                                   current_user.username,
+                                   current_user.level,
+                                   current_user.is_active);
 
         // We expect to scan 4 items. If we don't, the line was malformed.
         if (items_scanned == 4)
