@@ -47,7 +47,7 @@ You don't need any programming knowledge to start, but you will need to install 
 
 Each lesson folder contains one or more source files. For most of the course, a single `.c` file is both the complete, runnable program and the full lesson text.
 
-1.  **Read the Lesson:** Navigate to a lesson folder (e.g., `Part1_Core_Concepts/01_HelloWorld/`) and open the `.c` file. Read the comments from top to bottom to understand the concepts.
+1.  **Read the Lesson:** Navigate to a lesson folder (e.g., `Part1_Core_Concepts/01_HelloWorld/`) and open the `1_hello_world.c` file. Read the comments from top to bottom to understand the concepts.
 
 2.  **Compile and Run the Code:** To see the lesson's concepts in action, you'll need to compile and run the program.
 
@@ -63,14 +63,15 @@ Each lesson folder contains one or more source files. For most of the course, a 
     cd Part1_Core_Concepts/01_HelloWorld
 
     # Compile the code using GCC
-    gcc -Wall -Wextra -std=c11 -o HelloWorld HelloWorld.c
+    # Note: the output file (-o) matches the source file name
+    gcc -Wall -Wextra -std=c11 -o 1_hello_world 1_hello_world.c
 
     # Run the compiled program
     # On Linux/macOS
-    ./HelloWorld
+    ./1_hello_world
 
     # On Windows
-    HelloWorld.exe
+    1_hello_world.exe
     ```
     *Note: Later projects will use `Make`. In those cases, you will simply run the `make` command in the lesson directory.*
 
@@ -85,17 +86,17 @@ The curriculum is divided into five parts, taking you from a blank text file to 
 <br>
 <i>(Focus: Core language syntax and logic, taught entirely within single-file console applications.)</i>
 
-| Lesson                         | Key Concepts                                     | Description                                                              |
-| ------------------------------ | ------------------------------------------------ | ------------------------------------------------------------------------ |
-| `01_HelloWorld.c`              | `main()`, `<stdio.h>`, `printf()`                | The essential first step: compiling and running a basic program.         |
-| `02_VariablesAndDataTypes.c`     | `int`, `double`, `char`, format specifiers       | Learn to store, manage, and display information.                         |
-| `03_UserInput.c`               | `scanf()`, `&` (address-of)                      | Make your programs interactive by reading user input from the keyboard.  |
-| `04_BasicOperators.c`          | `+`, `/`, `%`, `==`, `&&`, `||`                  | Perform calculations and make logical comparisons.                       |
-| `05_ConditionalStatements.c`   | `if`, `else if`, `else`                          | Give your program a brain by letting it make decisions and follow logic. |
-| `06_Loops.c`                   | `for`, `while`, `do-while`                       | Teach your program to perform repetitive tasks efficiently.              |
-| `07_Functions.c`               | Prototypes, definitions, calls                   | Organize code into clean, reusable, and modular blocks—a core concept.   |
-| `08_Arrays.c`                  | Declaration, initialization, iteration         | Manage collections of data of the same type.                             |
-| `09_Strings.c`                 | `char[]`, `\0` (null terminator), `<string.h>`   | Master text manipulation, a fundamental programming skill.               |
+| Lesson                               | Key Concepts                                     | Description                                                              |
+| ------------------------------------ | ------------------------------------------------ | ------------------------------------------------------------------------ |
+| `1_hello_world.c`                    | `main()`, `<stdio.h>`, `printf()`                | The essential first step: compiling and running a basic program.         |
+| `2_variables_and_data_types.c`       | `int`, `double`, `char`, format specifiers       | Learn to store, manage, and display information.                         |
+| `3_user_input.c`                     | `scanf()`, `&` (address-of)                      | Make your programs interactive by reading user input from the keyboard.  |
+| `4_basic_operators.c`                | `+`, `/`, `%`, `==`, `&&`, `||`                  | Perform calculations and make logical comparisons.                       |
+| `5_conditional_statements.c`         | `if`, `else if`, `else`                          | Give your program a brain by letting it make decisions and follow logic. |
+| `6_loops.c`                          | `for`, `while`, `do-while`                       | Teach your program to perform repetitive tasks efficiently.              |
+| `7_functions.c`                      | Prototypes, definitions, calls                   | Organize code into clean, reusable, and modular blocks—a core concept.   |
+| `8_arrays.c`                         | Declaration, initialization, iteration         | Manage collections of data of the same type.                             |
+| `9_strings.c`                        | `char[]`, `\0` (null terminator), `<string.h>`   | Master text manipulation, a fundamental programming skill.               |
 
 </details>
 
@@ -104,14 +105,14 @@ The curriculum is divided into five parts, taking you from a blank text file to 
 <br>
 <i>(Focus: Mastering memory, custom data types, and file persistence.)</i>
 
-| Lesson                   | Key Concepts                                 | Description                                                              |
-| ------------------------ | -------------------------------------------- | ------------------------------------------------------------------------ |
-| `10_Pointers.c`            | `&`, `*` (dereference), `NULL`               | Unlock C's most famous and powerful feature: direct memory manipulation. |
-| `11_PointersAndArrays.c`   | Pointer arithmetic                           | Explore the deep, fundamental relationship between pointers and arrays.  |
-| `12_Structs.c`             | `struct`, member access (`.`, `->`)          | Create your own custom, complex data types to model real-world objects.  |
-| `13_DynamicMemory.c`       | `malloc()`, `free()`, the heap, memory leaks | Gain full control over your program's memory at runtime—a crucial C skill. |
-| `14_FileIO.c`              | `FILE*`, `fopen()`, `fclose()`, `fprintf()`  | Persist data beyond program execution by reading from and writing to files.|
-| `15_CommandLineArgs.c`     | `argc`, `argv`                               | Make flexible tools that accept input directly from the command line.    |
+| Lesson                           | Key Concepts                                 | Description                                                              |
+| -------------------------------- | -------------------------------------------- | ------------------------------------------------------------------------ |
+| `10_pointers.c`                    | `&`, `*` (dereference), `NULL`               | Unlock C's most famous and powerful feature: direct memory manipulation. |
+| `11_pointers_and_arrays.c`         | Pointer arithmetic                           | Explore the deep, fundamental relationship between pointers and arrays.  |
+| `12_structs.c`                     | `struct`, member access (`.`, `->`)          | Create your own custom, complex data types to model real-world objects.  |
+| `13_dynamic_memory_allocation.c` | `malloc()`, `free()`, the heap, memory leaks | Gain full control over your program's memory at runtime—a crucial C skill. |
+| `14_file_io.c`                     | `FILE*`, `fopen()`, `fclose()`, `fprintf()`  | Persist data beyond program execution by reading from and writing to files.|
+| `15_command_line_arguments.c`      | `argc`, `argv`                               | Make flexible tools that accept input directly from the command line.    |
 
 </details>
 
@@ -120,18 +121,18 @@ The curriculum is divided into five parts, taking you from a blank text file to 
 <br>
 <i>(Focus: Building complete projects and learning advanced language features.)</i>
 
-| Lesson                  | Key Concepts                                   | Description                                                                    |
-| ----------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------ |
-| `16_SimpleCalculator.c`   | **Project:** Combining `argv` and logic        | Build your first complete, useful tool from the skills you've learned.         |
-| `17_StudentRecordSystem.c`| **Project:** Structs, arrays, and file I/O   | Create a menu-driven database application to manage student records.           |
-| `18_FunctionPointers.c`   | Callbacks, dispatch tables                     | Learn to treat functions like data for highly flexible and dynamic code.       |
-| `19_Recursion.c`          | Base cases, recursive steps                    | Explore an elegant, powerful alternative to loops for solving complex problems.|
-| `20_LinkedLists.c`        | `struct Node`, traversal                       | Build one of the most fundamental dynamic data structures from scratch.        |
-| `21_BitManipulation.c`    | `&`, `|`, `^`, `~`, `<<`, `>>`                 | Go low-level by directly manipulating the individual bits of data.             |
-| `22_Preprocessor.c`       | `#define`, `#include "..."`, `#ifdef`          | Understand the C preprocessor and how to manage large, multi-file projects.    |
-| `23_UnionsAndEnums.c`     | `union`, `enum`                                | Learn specialized types for efficient memory use and creating readable constants.|
-| `24_StaticAndExtern.c`    | `static`, `extern`, scope, linkage             | Master variable lifetime and visibility across an entire project.              |
-| `25_SimpleTextEditor.c`   | **Capstone:** Doubly-linked list, File I/O     | Build a functional, line-based text editor. A true test of your C skills.      |
+| Lesson                           | Key Concepts                                   | Description                                                                    |
+| -------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------ |
+| `16_simple_calculator.c`         | **Project:** Combining `argv` and logic        | Build your first complete, useful tool from the skills you've learned.         |
+| `17_student_record_system.c`     | **Project:** Structs, arrays, and file I/O   | Create a menu-driven database application to manage student records.           |
+| `18_function_pointers.c`         | Callbacks, dispatch tables                     | Learn to treat functions like data for highly flexible and dynamic code.       |
+| `19_recursion.c`                 | Base cases, recursive steps                    | Explore an elegant, powerful alternative to loops for solving complex problems.|
+| `20_linked_lists.c`              | `struct Node`, traversal                       | Build one of the most fundamental dynamic data structures from scratch.        |
+| `21_bit_manipulation.c`          | `&`, `|`, `^`, `~`, `<<`, `>>`                 | Go low-level by directly manipulating the individual bits of data.             |
+| `22_preprocessor_directives.c`   | `#define`, `#include "..."`, `#ifdef`          | Understand the C preprocessor and how to manage large, multi-file projects.    |
+| `23_unions_and_enums.c`          | `union`, `enum`                                | Learn specialized types for efficient memory use and creating readable constants.|
+| `24_static_and_extern_variables.c` | `static`, `extern`, scope, linkage             | Master variable lifetime and visibility across an entire project.              |
+| `25_simple_text_editor.c`        | **Capstone:** Doubly-linked list, File I/O     | Build a functional, line-based text editor. A true test of your C skills.      |
 
 </details>
 
@@ -140,13 +141,13 @@ The curriculum is divided into five parts, taking you from a blank text file to 
 <br>
 <i>(Focus: Interacting with the operating system, the network, and multiple CPU cores.)</i>
 
-| Lesson                             | Key Concepts                                 | Description                                                                  |
-| ---------------------------------- | -------------------------------------------- | ---------------------------------------------------------------------------- |
-| `26_SimpleSocketServer.c`            | Sockets (`bind`, `listen`, `accept`)         | **Your Gateway to the Internet:** Build a basic client-server application.     |
-| `27_BuildYourOwnGrep.c`              | **Project:** Advanced File I/O, `strstr`     | **Build a Famous CLI Tool:** Create your own version of the `grep` utility.  |
-| `28_HashTable.c`                   | Hashing, collision resolution                | **The Engine of Modern Languages:** Implement a hash table from scratch.     |
-| `29_TinyShell.c`                     | **Project:** `fork`, `execvp`, `waitpid`     | **Build Your Own `bash`:** Create a working shell to execute other programs. |
-| `30_MultithreadedFileAnalyzer.c`     | **Project:** `pthreads`, mutexes             | **Harness Multi-Core Power:** Use threads to analyze a large file in parallel. |
+| Lesson                               | Key Concepts                                 | Description                                                                  |
+| ------------------------------------ | -------------------------------------------- | ---------------------------------------------------------------------------- |
+| `26_simple_socket_server.c`          | Sockets (`bind`, `listen`, `accept`)         | **Your Gateway to the Internet:** Build a basic client-server application.     |
+| `27_build_your_own_grep.c`           | **Project:** Advanced File I/O, `strstr`     | **Build a Famous CLI Tool:** Create your own version of the `grep` utility.  |
+| `28_hash_table_implementation.c`     | Hashing, collision resolution                | **The Engine of Modern Languages:** Implement a hash table from scratch.     |
+| `29_tiny_shell.c`                      | **Project:** `fork`, `execvp`, `waitpid`     | **Build Your Own `bash`:** Create a working shell to execute other programs. |
+| `30_multithreaded_file_analyzer.c`   | **Project:** `pthreads`, mutexes             | **Harness Multi-Core Power:** Use threads to analyze a large file in parallel. |
 
 </details>
 
@@ -155,13 +156,13 @@ The curriculum is divided into five parts, taking you from a blank text file to 
 <br>
 <i>(Focus: Building large, multi-file applications with external libraries and advanced user interfaces.)</i>
 
-| Lesson                                  | Key Concepts                                 | Description                                                                                             |
-| --------------------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `31_MakefilesForMultiFileProjects`        | **Project:** `make`, targets, rules          | Learn to automate the build process for complex, multi-file projects.                                   |
-| `32_LinkingExternalLibraries`           | `-L`, `-l` flags, library paths              | Understand how to find, link, and use third-party libraries like `ncurses`.                           |
-| `33_AdvancedTerminalUI`                 | **Project:** `ncurses`, windows, color       | Move beyond `printf` to build rich, interactive user interfaces in the terminal.                        |
-| `34_ParsingDataFiles`                   | `strtok`, `sscanf`, state machines           | Create programs that can be configured by reading and parsing structured text files.                  |
-| `35_Capstone_AwesomeTextAdventure`      | **Final Capstone Project**                   | A large, multi-file text RPG using `make`, `ncurses`, and a file-based world map. Integrates all course concepts into one epic final project. |
+| Lesson                                     | Key Concepts                                 | Description                                                                                             |
+| ------------------------------------------ | -------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `31_make_files_for_multi_file_projects`    | **Project:** `make`, targets, rules          | Learn to automate the build process for complex, multi-file projects.                                   |
+| `32_linking_external_libraries.c`          | `-L`, `-l` flags, library paths              | Understand how to find, link, and use third-party libraries like `ncurses`.                           |
+| `33_advanced_terminal_ui.c`                | **Project:** `ncurses`, windows, color       | Move beyond `printf` to build rich, interactive user interfaces in the terminal.                        |
+| `34_parsing_data_files.c`                  | `strtok`, `sscanf`, state machines           | Create programs that can be configured by reading and parsing structured text files.                  |
+| `35_capstone_awesome_text_adventure.c`     | **Final Capstone Project**                   | A large, multi-file text RPG using `make`, `ncurses`, and a file-based world map. Integrates all course concepts into one epic final project. |
 
 </details>
 
