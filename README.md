@@ -1,4 +1,4 @@
-# C From The Ground Up - A Project-Based Journey
+# C From The Ground Up - A Project-Based Approach
 
 <p align="center">
   <b>A complete, open-source curriculum that teaches you C by building a portfolio of real-world tools and applications from scratch.</b>
@@ -10,18 +10,18 @@
   <a href="https://en.wikipedia.org/wiki/C11_(C_standard_revision)"><img src="https://img.shields.io/badge/Language-C11-blue.svg" alt="C11"></a>
   <a href="https://www.gnu.org/software/make/"><img src="https://img.shields.io/badge/Build-Make-green.svg" alt="Make"></a>
   <a href="https://en.wikipedia.org/wiki/Ncurses"><img src="https://img.shields.io/badge/UI-ncurses-9cf" alt="ncurses"></a>
-  <a href="https://github.com/dunamismax/C-From-The-Ground-Up-A-Project-Based-Journey/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
-  <a href="https://github.com/dunamismax/C-From-The-Ground-Up-A-Project-Based-Journey/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs Welcome"></a>
-  <a href="https://github.com/dunamismax/C-From-The-Ground-Up-A-Project-Based-Journey/stargazers"><img src="https://img.shields.io/github/stars/dunamismax/C-From-The-Ground-Up-A-Project-Based-Journey?style=social" alt="GitHub Stars"></a>
+  <a href="https://github.com/dunamismax/C-From-The-Ground-Up-A-Project-Based-Approach/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+  <a href="https://github.com/dunamismax/C-From-The-Ground-Up-A-Project-Based-Approach/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs Welcome"></a>
+  <a href="https://github.com/dunamismax/C-From-The-Ground-Up-A-Project-Based-Approach/stargazers"><img src="https://img.shields.io/github/stars/dunamismax/C-From-The-Ground-Up-A-Project-Based-Approach?style=social" alt="GitHub Stars"></a>
 </p>
 
 ---
 
-Welcome to the ultimate journey into the C programming language! This is not just a tutorial; it's a complete, foundational computer science education designed to build deep, practical knowledge. We start with the absolute basics—assuming you've never written a line of code—and end with a portfolio of impressive systems projects, including a multithreaded application and an advanced text-based RPG.
+Welcome to the ultimate approach for learning the C programming language! This is not just a tutorial; it's a complete, foundational computer science education designed to build deep, practical knowledge. We start with the absolute basics—assuming you've never written a line of code—and end with a portfolio of impressive systems projects, including a multithreaded application and an advanced text-based RPG.
 
 > Learning C is learning the fundamentals of how computers truly work. This course is your foundation, laid one brick—one concept, one project—at a time. Mastering C will make you a fundamentally better developer, no matter what language you use in the future.
 
-## ✨ Why This Journey?
+## ✨ Why This Approach?
 
 *   📖 **Learn Directly In The Code**: Forget switching between theory and practice. Every lesson is taught directly within the comments of a single, runnable C file. The code *is* the textbook.
 *   👨‍💻 **True Beginners Welcome**: This course has zero prerequisites. We'll guide you through installing a compiler and writing `printf("Hello, World!");` before we even think about pointers.
@@ -53,8 +53,8 @@ Each lesson folder contains one or more source files. For most of the course, a 
 
     First, clone the repository (you only need to do this once):
     ```sh
-    git clone https://github.com/dunamismax/C-From-The-Ground-Up-A-Project-Based-Journey.git
-    cd C-From-The-Ground-Up-A-Project-Based-Journey
+    git clone https://github.com/dunamismax/C-From-The-Ground-Up-A-Project-Based-Approach.git
+    cd C-From-The-Ground-Up-A-Project-Based-Approach
     ```
 
     Then, for each lesson, navigate to its folder and use the C compiler. We highly recommend using these flags to catch common errors.
@@ -77,7 +77,7 @@ Each lesson folder contains one or more source files. For most of the course, a 
 
 ---
 
-## 📚 The Journey
+## 📚 The Curriculum
 
 The curriculum is divided into five parts, taking you from a blank text file to a C master capable of building complex systems applications.
 
@@ -170,11 +170,11 @@ The curriculum is divided into five parts, taking you from a blank text file to 
 
 ## ⭐ Show Your Support
 
-If this journey helps you become a better developer, please **give this repository a star!** It helps the project reach more aspiring programmers and encourages us to keep creating great, free content.
+If this approach helps you become a better developer, please **give this repository a star!** It helps the project reach more aspiring programmers and encourages us to keep creating great, free content.
 
 ## 🤝 Connect & Contribute
 
-This project is for the community. Have an idea for a new feature, a better way to explain a concept, or find a bug? Feel free to [open an issue](https://github.com/dunamismax/C-From-The-Ground-Up-A-Project-Based-Journey/issues) or submit a pull request!
+This project is for the community. Have an idea for a new feature, a better way to explain a concept, or find a bug? Feel free to [open an issue](https://github.com/dunamismax/C-From-The-Ground-Up-A-Project-Based-Approach/issues) or submit a pull request!
 
 Connect with the author, **dunamismax**, on:
 
