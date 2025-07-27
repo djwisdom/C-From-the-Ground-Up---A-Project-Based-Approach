@@ -13,7 +13,6 @@
   <a href="https://www.gnu.org/software/make/"><img src="https://img.shields.io/badge/Make-Build_System-3071A4.svg" alt="Make Build System"></a>
   <a href="https://en.wikipedia.org/wiki/Ncurses"><img src="https://img.shields.io/badge/UI-ncurses-9cf" alt="ncurses"></a>
   <a href="https://clang.llvm.org/"><img src="https://img.shields.io/badge/Clang-17+-3071A4.svg?logo=llvm" alt="Clang Version"></a>
-  <a href="https://developer.apple.com/documentation/apple-silicon"><img src="https://img.shields.io/badge/ARM64-Apple_Silicon-000000.svg?logo=apple" alt="ARM64 Optimization"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT License"></a>
 </p>
 
