@@ -87,6 +87,7 @@ typedef struct
 {
     char *data_chunk; // Pointer to the start of this thread's data
     long chunk_size;  // How many bytes this thread should process
+    int starts_inside_word; // True when this chunk begins in the middle of a word
 } ThreadData;
 
 // --- The Worker Function ---
@@ -102,7 +103,7 @@ void *analyze_chunk(void *arg)
     long long local_chars = 0;
     long long local_words = 0;
     long long local_lines = 0;
-    int in_word = 0; // A flag to track if we are inside a word
+    int in_word = data->starts_inside_word; // Continue an in-progress word across chunks
 
     for (long i = 0; i < data->chunk_size; i++)
     {
@@ -114,7 +115,7 @@ void *analyze_chunk(void *arg)
             local_lines++;
         }
 
-        if (isspace(c))
+        if (isspace((unsigned char)c))
         {
             in_word = 0;
         }
@@ -154,19 +155,37 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    fseek(file, 0, SEEK_END);
+    if (fseek(file, 0, SEEK_END) != 0)
+    {
+        perror("Error seeking to end of file");
+        fclose(file);
+        return 1;
+    }
+
     long file_size = ftell(file);
+    if (file_size < 0)
+    {
+        perror("Error determining file size");
+        fclose(file);
+        return 1;
+    }
+
     fseek(file, 0, SEEK_SET);
 
-    char *file_buffer = malloc(file_size);
-    if (!file_buffer)
+    char *file_buffer = NULL;
+    if (file_size > 0)
+    {
+        file_buffer = malloc((size_t)file_size);
+    }
+
+    if (file_size > 0 && !file_buffer)
     {
         fprintf(stderr, "Could not allocate memory for file\n");
         fclose(file);
         return 1;
     }
 
-    if (fread(file_buffer, 1, file_size, file) != file_size)
+    if (file_size > 0 && fread(file_buffer, 1, (size_t)file_size, file) != (size_t)file_size)
     {
         fprintf(stderr, "Error reading file\n");
         free(file_buffer);
@@ -184,8 +203,12 @@ int main(int argc, char *argv[])
     long chunk_size = file_size / NUM_THREADS;
     for (int i = 0; i < NUM_THREADS; i++)
     {
-        thread_args[i].data_chunk = file_buffer + (i * chunk_size);
-        thread_args[i].chunk_size = (i == NUM_THREADS - 1) ? (file_size - (i * chunk_size)) : chunk_size;
+        long chunk_start = i * chunk_size;
+
+        thread_args[i].data_chunk = file_buffer + chunk_start;
+        thread_args[i].chunk_size = (i == NUM_THREADS - 1) ? (file_size - chunk_start) : chunk_size;
+        thread_args[i].starts_inside_word =
+            (chunk_start > 0 && !isspace((unsigned char)file_buffer[chunk_start - 1]));
 
         printf("Launching thread %d to process %ld bytes.\n", i, thread_args[i].chunk_size);
         // `pthread_create` starts a new thread executing `analyze_chunk`

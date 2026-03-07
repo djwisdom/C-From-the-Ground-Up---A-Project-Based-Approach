@@ -4,9 +4,9 @@
  * @author dunamismax
  * @date 06-15-2025
  *
- * This file contains the complete source code for the final capstone project.
- * It integrates nearly every concept taught in this course into a single,
- * functional, and fun application: a text-based adventure game.
+ * This file contains the source code for the final capstone lesson.
+ * It pulls together many earlier topics into a single ncurses-based
+ * text adventure that loads a map file at runtime.
  */
 
 /*
@@ -31,8 +31,8 @@
  * - Parsing: `sscanf` is used to parse the world data file.
  * - Command-Line Arguments: The program takes the map file as an argument.
  * - External Libraries: We use the `ncurses` library for an advanced terminal UI.
- * - Multi-file Builds: This project is designed to be built with a `Makefile`,
- *   the standard for any non-trivial C application.
+ * - Build Tooling: Lesson 31 introduced Makefiles, but this capstone stays in
+ *   one source file so you can build it directly with a compiler command.
  * - Advanced Techniques: We'll even use an array of structs with function
  *   pointers for a clean command handling system.
  *
@@ -408,11 +408,13 @@ void parse_and_execute_command(GameState *game, char *input)
 
 void handle_quit(GameState *game, char *argument)
 {
+    (void)argument;
     game->game_should_close = 1;
 }
 
 void handle_look(GameState *game, char *argument)
 {
+    (void)argument;
     Room *room = game->player.current_room;
     ui_log(game, room->description);
 
@@ -445,7 +447,7 @@ void handle_go(GameState *game, char *argument)
         return;
     }
 
-    Direction dir = -1;
+    int dir = -1;
     if (strcmp(argument, "n") == 0 || strcmp(argument, "north") == 0)
         dir = NORTH;
     else if (strcmp(argument, "s") == 0 || strcmp(argument, "south") == 0)
@@ -475,6 +477,7 @@ void handle_go(GameState *game, char *argument)
 
 void handle_help(GameState *game, char *argument)
 {
+    (void)argument;
     ui_log(game, "--- Available Commands ---");
     ui_log(game, "look (l): Describe the current room and exits.");
     ui_log(game, "go <dir>: Move in a direction (north, south, east, west, or n,s,e,w).");
@@ -511,9 +514,6 @@ void ui_init(GameState *game)
 
 void ui_draw(GameState *game)
 {
-    int width;
-    width = getmaxx(stdscr);
-
     // Draw status window
     box(game->status_win, 0, 0);
     mvwprintw(game->status_win, 1, 2, "Location: Room %d", game->player.current_room->id);
@@ -610,8 +610,8 @@ void cleanup(GameState *game)
  *
  * HOW TO COMPILE AND RUN THIS PROJECT:
  *
- * This is a true, multi-part C project. You cannot compile it with a simple
- * `gcc` command. You must create the supporting files and use `make`.
+ * This lesson is still a single-source-file program. You can compile it with
+ * one command, then point it at any compatible map file you create.
  *
  * 1. CREATE THE DATA FILE:
  *    In the same directory, create a file named `world.map`. This file defines
@@ -629,40 +629,15 @@ void cleanup(GameState *game)
  *    link 2 s 3
  *    link 3 n 2
  *
- * 2. CREATE THE MAKEFILE:
- *    This project requires linking the `ncurses` library. A Makefile is the
- *    standard way to manage this. Create a file named `Makefile` (with a
- *    capital M, no extension) and copy this content into it:
+ * 2. COMPILE THE PROGRAM:
+ *    Open a terminal in the directory containing this file and link `ncurses`:
  *
- *    # Makefile for the Awesome Text Adventure
- *    CC = gcc
- *    CFLAGS = -Wall -Wextra -std=c11
- *    LDFLAGS = -lncurses
- *    TARGET = 35_capstone_awesome_text_adventure
- *    SRC = 35_capstone_awesome_text_adventure.c
+ *      `cc -Wall -Wextra -std=c11 -o 35_capstone_awesome_text_adventure 35_capstone_awesome_text_adventure.c -lncurses`
  *
- *    all: $(TARGET)
- *
- *    $(TARGET): $(SRC)
- *        $(CC) $(CFLAGS) -o $(TARGET) $(SRC) $(LDFLAGS)
- *
- *    clean:
- *        rm -f $(TARGET)
- *
- * 3. COMPILE THE PROJECT:
- *    Open a terminal in the directory containing all three files (`.c`, `.map`, `Makefile`).
- *    Simply run the `make` command:
- *
- *      `make`
- *
- *    This will automatically execute the correct `gcc` command with all the
- *    necessary flags and libraries.
- *
- * 4. RUN THE GAME:
+ * 3. RUN THE GAME:
  *    Execute the program, passing the map file as a command-line argument:
  *
  *      `./35_capstone_awesome_text_adventure world.map`
  *
- *    Your terminal will transform, and the game will begin. Congratulations,
- *    you have completed C From The Ground Up!
+ *    Your terminal will transform, and the game will begin.
  */
