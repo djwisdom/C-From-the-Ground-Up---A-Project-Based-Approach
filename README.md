@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/dunamismax/images/blob/main/c/LLVMWyvern.png" alt="LLVM Wyvern C Programming" width="350" />
+  <img src="assets/images/LLVMWyvern.png" alt="LLVM Wyvern C Programming" width="350" />
 </p>
 
 <p align="center">
@@ -32,7 +32,7 @@ A complete, open-source curriculum that teaches you C by building a portfolio of
 - **Open Source Excellence**: Community-driven curriculum with comprehensive documentation
 
 <p align="center">
-  <img src="https://github.com/dunamismax/images/blob/main/c/C-Logo.png" alt="C Programming Language Logo" width="150" />
+  <img src="assets/images/C-Logo.png" alt="C Programming Language Logo" width="150" />
 </p>
 
 ## Course Structure
@@ -106,7 +106,7 @@ The curriculum is designed to be self-contained with each lesson building upon p
 ---
 
 <p align="center">
-  <img src="https://github.com/dunamismax/images/blob/main/c/c-programming-typed.png" alt="C Programming Typed" width="400" />
+  <img src="assets/images/c-programming-typed.png" alt="C Programming Typed" width="400" />
 </p>
 
 ## Why This Approach?
@@ -145,7 +145,7 @@ Create network applications, command-line tools, and multithreaded programs that
 Develop large-scale applications using external libraries, advanced UI frameworks, and comprehensive build systems.
 
 <p align="center">
-  <img src="https://github.com/dunamismax/images/blob/main/c/logo-logo-modern.png" alt="Modern C Logo" width="250" />
+  <img src="assets/images/logo-logo-modern.png" alt="Modern C Logo" width="250" />
 </p>
 
 ## Technology Stack
@@ -187,7 +187,7 @@ Works on all major platforms with C compiler support:
 - Hash table implementation with collision resolution
 
 <p align="center">
-  <img src="https://github.com/dunamismax/images/blob/main/c/the-c-programming-language.png" alt="The C Programming Language Book" width="300" />
+  <img src="assets/images/the-c-programming-language.png" alt="The C Programming Language Book" width="300" />
 </p>
 
 ## Learning Objectives
@@ -234,7 +234,7 @@ make
 ```
 
 <p align="center">
-  <img src="https://github.com/dunamismax/images/blob/main/c/c-computerphile.png" alt="C Computerphile" width="400" />
+  <img src="assets/images/c-computerphile.png" alt="C Computerphile" width="400" />
 </p>
 
 ## Course Philosophy
@@ -292,5 +292,5 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 </p>
 
 <p align="center">
-  <img src="https://github.com/dunamismax/images/blob/main/c/C-programming.png" alt="C Programming" width="400" />
+  <img src="assets/images/C-programming.png" alt="C Programming" width="400" />
 </p>
