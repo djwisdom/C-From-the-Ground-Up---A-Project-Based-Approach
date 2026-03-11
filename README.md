@@ -82,10 +82,11 @@ make -C "Part 5 - Expert Systems & Application Development/31_make_files_for_mul
 
 ## Build Notes
 
-- Most lessons compile with `cc -Wall -Wextra -std=c11 lesson.c -o lesson_name`.
+- Most lessons compile cleanly with `cc -Wall -Wextra -Wpedantic -Wstrict-prototypes -std=c11 lesson.c -o lesson_name`.
+- Lessons 26 through 30 use POSIX or Unix-style APIs such as sockets, `fork`, `waitpid`, `unistd.h`, and `pthread`.
 - Lesson 30 needs `-pthread`.
 - Lesson 32 needs `-lm`.
-- Lessons 33 and 35 need `-lncurses` or `-lncursesw`, depending on your system.
+- Lessons 33 and 35 need `-lncurses` or `-lncursesw`, depending on your system, so they are easiest to run on Unix-like systems or inside WSL on Windows.
 - Several lessons expect runtime input or data files. Read the lesson comments before running them.
 
 ## Verification
@@ -100,7 +101,11 @@ The smoke check:
 
 - Compiles every lesson into a temporary build directory.
 - Builds lesson 31 through its `Makefile`.
+- Verifies the socket lesson with a real local client/server exchange.
+- Exercises the student record system's invalid-input and save/load paths.
+- Confirms TinyShell rejects overlong commands instead of splitting them.
 - Verifies the multithreaded file analyzer against `wc` on a boundary-sensitive sample file.
+- Runs optional AddressSanitizer/UndefinedBehaviorSanitizer regressions when the compiler supports them.
 - Cleans up generated binaries and lesson 31 build products before exiting.
 
 ## Capstone Note

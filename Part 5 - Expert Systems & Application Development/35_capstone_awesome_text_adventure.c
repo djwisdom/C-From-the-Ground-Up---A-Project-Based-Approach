@@ -40,17 +40,21 @@
  */
 
 // --- Standard and External Library Includes ---
+#include <ctype.h>  // For tolower()
+#include <errno.h>  // For robust numeric parsing
+#include <limits.h> // For INT_MIN and INT_MAX
 #include <ncurses.h> // For the advanced Terminal User Interface (TUI)
 #include <stdio.h>
 #include <stdlib.h> // For malloc, free, exit
 #include <string.h> // For string manipulation functions
-#include <ctype.h>  // For tolower()
 
 // --- Game Constants and Enums ---
 #define MAX_DIRECTIONS 4
 #define MAX_ROOMS 100
 #define MAX_LOG_MESSAGES 10
 #define INPUT_BUFFER_SIZE 100
+#define ROOM_DESCRIPTION_SIZE 512
+#define WORLD_LINE_BUFFER_SIZE 1024
 
 // Using an enum makes direction-related code much more readable and safe.
 typedef enum
@@ -70,7 +74,7 @@ struct GameState;
 typedef struct Room
 {
     int id;
-    char description[512];
+    char description[ROOM_DESCRIPTION_SIZE];
     // This is the key: an array of POINTERS to other Room structs.
     // This is how we form the "graph" of our world map.
     struct Room *exits[MAX_DIRECTIONS];
@@ -117,6 +121,11 @@ int parse_room(char *line, GameState *game);
 int parse_link(char *line, GameState *game);
 Room *find_room_by_id(GameState *game, int id);
 const char *direction_to_string(Direction d);
+int read_world_line(FILE *file, char *buffer, size_t size);
+char *skip_whitespace(char *text);
+int parse_int_token(char **cursor, int *value);
+int has_only_trailing_whitespace(char *text);
+char *duplicate_string(const char *text);
 
 // Command Handling
 void parse_and_execute_command(GameState *game, char *input);
@@ -133,6 +142,90 @@ void ui_log(GameState *game, const char *message);
 void ui_cleanup(GameState *game);
 
 // --- Main Program Entry ---
+int read_world_line(FILE *file, char *buffer, size_t size)
+{
+    size_t length;
+
+    if (fgets(buffer, size, file) == NULL)
+    {
+        return 0;
+    }
+
+    length = strcspn(buffer, "\n");
+    if (buffer[length] == '\n')
+    {
+        buffer[length] = '\0';
+        return 1;
+    }
+
+    if (!feof(file))
+    {
+        int ch;
+
+        while ((ch = fgetc(file)) != '\n' && ch != EOF)
+        {
+            // Discard the rest of an overlong line so the next read starts cleanly.
+        }
+        buffer[0] = '\0';
+        return -1;
+    }
+
+    return 1;
+}
+
+char *skip_whitespace(char *text)
+{
+    while (isspace((unsigned char)*text))
+    {
+        text++;
+    }
+
+    return text;
+}
+
+int parse_int_token(char **cursor, int *value)
+{
+    char *endptr;
+    long parsed;
+
+    *cursor = skip_whitespace(*cursor);
+    if (**cursor == '\0')
+    {
+        return 0;
+    }
+
+    errno = 0;
+    parsed = strtol(*cursor, &endptr, 10);
+    if (errno != 0 || endptr == *cursor || parsed < INT_MIN || parsed > INT_MAX)
+    {
+        return 0;
+    }
+
+    *value = (int)parsed;
+    *cursor = endptr;
+    return 1;
+}
+
+int has_only_trailing_whitespace(char *text)
+{
+    text = skip_whitespace(text);
+    return *text == '\0';
+}
+
+char *duplicate_string(const char *text)
+{
+    size_t length = strlen(text) + 1;
+    char *copy = malloc(length);
+
+    if (!copy)
+    {
+        return NULL;
+    }
+
+    memcpy(copy, text, length);
+    return copy;
+}
+
 int main(int argc, char *argv[])
 {
     if (argc != 2)
@@ -189,6 +282,8 @@ GameState *load_world(const char *filename)
 {
     // Dynamically allocate the main GameState struct.
     GameState *game = malloc(sizeof(GameState));
+    int line_number = 0;
+    int line_status;
     if (!game)
         return NULL;
     // ALWAYS initialize allocated memory.
@@ -202,18 +297,27 @@ GameState *load_world(const char *filename)
         return NULL;
     }
 
-    char line[512];
+    char line[WORLD_LINE_BUFFER_SIZE];
 
     // --- TWO-PASS LOADING ---
     // This is a common and robust technique for loading interconnected data.
     // Pass 1: Read all room definitions and allocate memory for them.
-    while (fgets(line, sizeof(line), file))
+    while ((line_status = read_world_line(file, line, sizeof(line))) != 0)
     {
+        line_number++;
+        if (line_status < 0)
+        {
+            fprintf(stderr, "Error: world file line %d is too long.\n", line_number);
+            fclose(file);
+            cleanup(game);
+            return NULL;
+        }
+
         if (strncmp(line, "room", 4) == 0)
         {
             if (!parse_room(line, game))
             {
-                fprintf(stderr, "Error parsing room definition.\n");
+                fprintf(stderr, "Error parsing room definition on line %d.\n", line_number);
                 fclose(file);
                 cleanup(game);
                 return NULL;
@@ -223,15 +327,25 @@ GameState *load_world(const char *filename)
 
     // Rewind the file pointer to the beginning for the second pass.
     rewind(file);
+    line_number = 0;
 
     // Pass 2: Read all link definitions and connect the already-created rooms.
-    while (fgets(line, sizeof(line), file))
+    while ((line_status = read_world_line(file, line, sizeof(line))) != 0)
     {
+        line_number++;
+        if (line_status < 0)
+        {
+            fprintf(stderr, "Error: world file line %d is too long.\n", line_number);
+            fclose(file);
+            cleanup(game);
+            return NULL;
+        }
+
         if (strncmp(line, "link", 4) == 0)
         {
             if (!parse_link(line, game))
             {
-                fprintf(stderr, "Error parsing link definition.\n");
+                fprintf(stderr, "Error parsing link definition on line %d.\n", line_number);
                 fclose(file);
                 cleanup(game);
                 return NULL;
@@ -248,14 +362,52 @@ GameState *load_world(const char *filename)
  */
 int parse_room(char *line, GameState *game)
 {
+    char *cursor = line;
     if (game->num_rooms >= MAX_ROOMS)
         return 0; // Guard against overflow.
 
     int id;
-    char desc[512];
+    char desc[ROOM_DESCRIPTION_SIZE];
+    size_t desc_length = 0;
 
-    // Using sscanf to parse a specific format from a string.
-    if (sscanf(line, "room %d \"%[^\"]\"", &id, desc) != 2)
+    if (strncmp(cursor, "room", 4) != 0 || !isspace((unsigned char)cursor[4]))
+    {
+        return 0;
+    }
+    cursor += 4;
+
+    if (!parse_int_token(&cursor, &id))
+    {
+        return 0;
+    }
+
+    cursor = skip_whitespace(cursor);
+    if (*cursor != '"')
+    {
+        return 0;
+    }
+    cursor++;
+
+    while (*cursor != '"' && *cursor != '\0')
+    {
+        if (desc_length >= sizeof(desc) - 1)
+        {
+            return 0;
+        }
+
+        desc[desc_length++] = *cursor;
+        cursor++;
+    }
+
+    if (*cursor != '"')
+    {
+        return 0;
+    }
+
+    desc[desc_length] = '\0';
+    cursor++;
+
+    if (!has_only_trailing_whitespace(cursor) || find_room_by_id(game, id) != NULL)
     {
         return 0;
     }
@@ -266,7 +418,7 @@ int parse_room(char *line, GameState *game)
 
     memset(new_room, 0, sizeof(Room)); // Initialize room exits to NULL.
     new_room->id = id;
-    strcpy(new_room->description, desc);
+    memcpy(new_room->description, desc, desc_length + 1);
 
     game->all_rooms[game->num_rooms++] = new_room;
     return 1;
@@ -277,10 +429,41 @@ int parse_room(char *line, GameState *game)
  */
 int parse_link(char *line, GameState *game)
 {
+    char *cursor = line;
     int from_id, to_id;
     char dir_str[10];
+    size_t dir_length = 0;
 
-    if (sscanf(line, "link %d %s %d", &from_id, dir_str, &to_id) != 3)
+    if (strncmp(cursor, "link", 4) != 0 || !isspace((unsigned char)cursor[4]))
+    {
+        return 0;
+    }
+    cursor += 4;
+
+    if (!parse_int_token(&cursor, &from_id))
+    {
+        return 0;
+    }
+
+    cursor = skip_whitespace(cursor);
+    if (*cursor == '\0')
+    {
+        return 0;
+    }
+
+    while (*cursor != '\0' && !isspace((unsigned char)*cursor))
+    {
+        if (dir_length >= sizeof(dir_str) - 1)
+        {
+            return 0;
+        }
+
+        dir_str[dir_length++] = *cursor;
+        cursor++;
+    }
+    dir_str[dir_length] = '\0';
+
+    if (dir_length == 0 || !parse_int_token(&cursor, &to_id) || !has_only_trailing_whitespace(cursor))
     {
         return 0;
     }
@@ -374,7 +557,7 @@ void parse_and_execute_command(GameState *game, char *input)
     // Convert input to lowercase for case-insensitive matching.
     for (int i = 0; input[i]; i++)
     {
-        input[i] = tolower(input[i]);
+        input[i] = (char)tolower((unsigned char)input[i]);
     }
 
     verb = strtok(input, " \n"); // Tokenize the string by space or newline.
@@ -537,6 +720,13 @@ void ui_draw(GameState *game)
 
 void ui_log(GameState *game, const char *message)
 {
+    char *message_copy = duplicate_string(message);
+
+    if (!message_copy)
+    {
+        return;
+    }
+
     // If the log is full, shift all messages up.
     if (game->log_count >= MAX_LOG_MESSAGES)
     {
@@ -547,8 +737,8 @@ void ui_log(GameState *game, const char *message)
         }
         game->log_count--;
     }
-    // strdup is a convenient (but non-standard) function that combines malloc and strcpy.
-    game->log_messages[game->log_count++] = strdup(message);
+
+    game->log_messages[game->log_count++] = message_copy;
 }
 
 void ui_get_input(GameState *game, char *buffer)
@@ -611,7 +801,9 @@ void cleanup(GameState *game)
  * HOW TO COMPILE AND RUN THIS PROJECT:
  *
  * This lesson is still a single-source-file program. You can compile it with
- * one command, then point it at any compatible map file you create.
+ * one command, then point it at any compatible map file you create. Because it
+ * depends on `ncurses`, it is aimed at Unix-like environments unless you install
+ * a compatible curses implementation for your platform.
  *
  * 1. CREATE THE DATA FILE:
  *    In the same directory, create a file named `world.map`. This file defines

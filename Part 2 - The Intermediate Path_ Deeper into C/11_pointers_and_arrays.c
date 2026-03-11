@@ -46,8 +46,8 @@ int main(void)
 
     // Let's prove that the array name 'grades' is just an address.
     // We will print the value of 'grades' and the address of its first element.
-    printf("Value of 'grades' (the array name): %p\n", grades);
-    printf("Address of the first element (&grades[0]): %p\n", &grades[0]);
+    printf("Value of 'grades' (the array name): %p\n", (void *)grades);
+    printf("Address of the first element (&grades[0]): %p\n", (void *)&grades[0]);
     printf("They are the same!\n\n");
 
     // --- Part 2: Pointer Arithmetic ---

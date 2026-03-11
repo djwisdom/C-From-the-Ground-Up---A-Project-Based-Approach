@@ -40,12 +40,13 @@
  */
 
 // --- Required Headers ---
-#include <stdio.h>      // For standard I/O
-#include <stdlib.h>     // For exit() and atoi()
-#include <string.h>     // For string manipulation
-#include <unistd.h>     // For close(), write()
-#include <sys/socket.h> // The main header for socket programming
 #include <arpa/inet.h>  // For address structures and functions
+#include <errno.h>      // For errno during numeric parsing
+#include <stdio.h>      // For standard I/O
+#include <stdlib.h>     // For exit() and strtol()
+#include <string.h>     // For string manipulation
+#include <sys/socket.h> // The main header for socket programming
+#include <unistd.h>     // For close(), write()
 
 int main(int argc, char *argv[])
 {
@@ -56,7 +57,16 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Usage: %s <Port>\n", argv[0]);
         return 1;
     }
-    int port = atoi(argv[2]);
+
+    char *endptr = NULL;
+    errno = 0;
+    long parsed_port = strtol(argv[1], &endptr, 10);
+    if (errno != 0 || endptr == argv[1] || *endptr != '\0' || parsed_port < 1 || parsed_port > 65535)
+    {
+        fprintf(stderr, "Error: Port must be a whole number between 1 and 65535.\n");
+        return 1;
+    }
+    int port = (int)parsed_port;
 
     // --- Part 1: Create the Server Socket ---
 
@@ -74,6 +84,8 @@ int main(int argc, char *argv[])
     // --- Part 2: Bind the Socket to an IP and Port ---
 
     struct sockaddr_in server_addr, client_addr;
+    memset(&server_addr, 0, sizeof(server_addr));
+    memset(&client_addr, 0, sizeof(client_addr));
 
     // Prepare the sockaddr_in structure for the server.
     server_addr.sin_family = AF_INET;
@@ -110,13 +122,18 @@ int main(int argc, char *argv[])
      * pending connections that can be queued up before the server starts
      * refusing new ones.
      */
-    listen(server_socket, 3);
+    if (listen(server_socket, 3) < 0)
+    {
+        perror("Listen failed");
+        close(server_socket);
+        return 1;
+    }
     printf("Server listening on port %d...\n", port);
     printf("Waiting for incoming connections...\n");
 
     // --- Part 4: Accept Incoming Connections ---
 
-    socklen_t client_addr_size = sizeof(struct sockaddr_in);
+    socklen_t client_addr_size = sizeof(client_addr);
 
     /*
      * The `accept()` function is a BLOCKING call. The program will pause here

@@ -170,7 +170,12 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    fseek(file, 0, SEEK_SET);
+    if (fseek(file, 0, SEEK_SET) != 0)
+    {
+        perror("Error rewinding file");
+        fclose(file);
+        return 1;
+    }
 
     char *file_buffer = NULL;
     if (file_size > 0)
@@ -194,6 +199,17 @@ int main(int argc, char *argv[])
     }
     fclose(file);
     printf("Successfully read %ld bytes from %s.\n", file_size, argv[1]);
+
+    if (file_size == 0)
+    {
+        printf("File is empty. Nothing to analyze.\n");
+        printf("\n--- Analysis Complete ---\n");
+        printf("Total Characters: %lld\n", g_counts.total_chars);
+        printf("Total Words:      %lld\n", g_counts.total_words);
+        printf("Total Lines:      %lld\n", g_counts.total_lines);
+        printf("-------------------------\n");
+        return 0;
+    }
 
     // --- Initialize Threads and Mutex ---
     pthread_t threads[NUM_THREADS];

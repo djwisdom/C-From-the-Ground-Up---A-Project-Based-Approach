@@ -143,6 +143,10 @@ int main(void)
     {
         printf("User does NOT have EXECUTE access.\n");
     }
+    if (!(user_permissions & FLAG_IS_ADMIN))
+    {
+        printf("User is NOT an administrator.\n");
+    }
 
     // 3. CLEARING a bit (revoking permission) using AND with NOT
     user_permissions = user_permissions & ~FLAG_WRITE_ACCESS;

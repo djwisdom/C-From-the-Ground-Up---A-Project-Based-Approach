@@ -98,7 +98,7 @@ int main(void)
         printf("The operating system could not provide the requested memory.\n");
         return 1; // Exit with an error code.
     }
-    printf("Memory allocated successfully at address: %p\n\n", gpa_list);
+    printf("Memory allocated successfully at address: %p\n\n", (void *)gpa_list);
 
     // 3. USE: Now we can use `gpa_list` just like a regular array.
     // Let's fill it with some sample data.

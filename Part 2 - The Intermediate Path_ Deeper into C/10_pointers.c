@@ -76,7 +76,7 @@ int main(void)
 
     // We use the address-of operator (&) to get its memory location.
     // The `%p` format specifier is used to print addresses in a standard hexadecimal format.
-    printf("The memory address of 'score' is: %p\n\n", &score);
+    printf("The memory address of 'score' is: %p\n\n", (void *)&score);
 
     // --- DEMONSTRATION 2: Declaring and Using a Pointer ---
 
@@ -86,14 +86,14 @@ int main(void)
     // We initialize it to NULL for safety.
     int *p_score = NULL;
 
-    printf("Initial value of p_score (a safe pointer): %p\n", p_score);
+    printf("Initial value of p_score (a safe pointer): %p\n", (void *)p_score);
 
     // Now, let's make the pointer 'point to' our 'score' variable.
     // We assign the address of 'score' to the pointer 'p_score'.
     p_score = &score;
 
-    printf("Value of p_score after assignment: %p (Notice it's score's address!)\n", p_score);
-    printf("Address of the pointer itself (p_score): %p\n\n", &p_score); // Pointers have their own address too!
+    printf("Value of p_score after assignment: %p (Notice it's score's address!)\n", (void *)p_score);
+    printf("Address of the pointer itself (p_score): %p\n\n", (void *)&p_score); // Pointers have their own address too!
 
     // --- DEMONSTRATION 3: Dereferencing a Pointer ---
 

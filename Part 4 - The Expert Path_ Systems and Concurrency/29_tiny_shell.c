@@ -83,6 +83,16 @@ void parse_input(char *line, char **args)
     args[i] = NULL;
 }
 
+void discard_remaining_input(void)
+{
+    int ch;
+
+    while ((ch = getchar()) != '\n' && ch != EOF)
+    {
+        // Consume the rest of an overlong command so it is not treated as a new one.
+    }
+}
+
 int main(void)
 {
     char *args[MAX_ARGS]; // Array to hold parsed command arguments
@@ -103,6 +113,13 @@ int main(void)
             // If fgets returns NULL, it's an end-of-file (Ctrl+D) or an error.
             printf("\nExiting TinyShell.\n");
             break;
+        }
+
+        if (strchr(line, '\n') == NULL && !feof(stdin))
+        {
+            discard_remaining_input();
+            printf("Command too long. Maximum length is %d characters.\n", MAX_LINE - 2);
+            continue;
         }
 
         // --- Step 2: Parse Input ---

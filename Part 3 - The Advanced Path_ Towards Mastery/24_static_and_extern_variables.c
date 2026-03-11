@@ -41,14 +41,14 @@
 // - A `static` local variable is created only once and exists for the ENTIRE
 //   lifetime of the program. It RETAINS ITS VALUE between function calls.
 
-void regular_counter()
+void regular_counter(void)
 {
     int count = 0; // This variable is recreated and reset to 0 every time.
     count++;
     printf("Regular counter is at: %d\n", count);
 }
 
-void static_counter()
+void static_counter(void)
 {
     // This variable is initialized to 0 only the VERY FIRST time.
     // In all subsequent calls, it keeps its previous value.
@@ -69,7 +69,7 @@ int g_public_variable = 100; // EXTERNAL linkage. Visible to other files.
 static int g_private_variable = 42; // INTERNAL linkage. Private to this file.
 
 // This also applies to functions.
-static void private_helper_function()
+static void private_helper_function(void)
 {
     printf("This is a private helper function. It cannot be called from other files.\n");
 }
