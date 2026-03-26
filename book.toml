@@ -1,0 +1,16 @@
+[book]
+title = "C From The Ground Up"
+authors = ["Stephen Sawyer"]
+description = "A progressive C learning workbook from basics to systems programming."
+language = "en"
+src = "src"
+
+[build]
+build-dir = "book"
+create-missing = false
+
+[output.html]
+default-theme = "ayu"
+git-repository-url = "https://github.com/dunamismax/c-from-the-ground-up"
+edit-url-template = "https://github.com/dunamismax/c-from-the-ground-up/edit/main/{path}"
+site-url = "/c-from-the-ground-up/"
