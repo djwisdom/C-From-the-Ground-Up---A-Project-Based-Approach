@@ -3,13 +3,15 @@
 set -eu
 
 CC=${CC:-cc}
-CFLAGS=${CFLAGS:--Wall -Wextra -Wpedantic -Wstrict-prototypes -Werror -std=c11}
+BASE_CFLAGS=${CFLAGS:--Wall -Wextra -Wpedantic -Wstrict-prototypes -Werror}
 
 ROOT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 BUILD_DIR=$(mktemp -d "${TMPDIR:-/tmp}/cftgu-smoke.XXXXXX")
 SOURCE_LIST="$BUILD_DIR/sources.txt"
 LESSON31_DIR="$ROOT_DIR/Part 5 - Expert Systems & Application Development/31_make_files_for_multi_file_projects"
 SOCKET_SERVER_PID=
+STANDARD_FLAG=
+EFFECTIVE_CFLAGS=
 
 cleanup() {
     if [ -n "${SOCKET_SERVER_PID}" ]; then
@@ -22,6 +24,24 @@ cleanup() {
 
 trap cleanup EXIT INT TERM HUP
 
+detect_standard_flag() {
+    cat > "$BUILD_DIR/standard_probe.c" <<'EOF'
+int main(void)
+{
+    return 0;
+}
+EOF
+
+    for flag in -std=c23 -std=c17; do
+        if "$CC" $BASE_CFLAGS "$BUILD_DIR/standard_probe.c" -o "$BUILD_DIR/standard_probe" "$flag" >/dev/null 2>&1; then
+            printf '%s\n' "$flag"
+            return 0
+        fi
+    done
+
+    return 1
+}
+
 detect_ncurses_flag() {
     cat > "$BUILD_DIR/ncurses_probe.c" <<'EOF'
 #include <ncurses.h>
@@ -33,7 +53,7 @@ int main(void)
 EOF
 
     for flag in -lncursesw -lncurses; do
-        if "$CC" $CFLAGS "$BUILD_DIR/ncurses_probe.c" -o "$BUILD_DIR/ncurses_probe" "$flag" >/dev/null 2>&1; then
+        if "$CC" $EFFECTIVE_CFLAGS "$BUILD_DIR/ncurses_probe.c" -o "$BUILD_DIR/ncurses_probe" "$flag" >/dev/null 2>&1; then
             printf '%s\n' "$flag"
             return 0
         fi
@@ -50,7 +70,7 @@ int main(void)
 }
 EOF
 
-    if "$CC" $CFLAGS "$BUILD_DIR/sanitizer_probe.c" -o "$BUILD_DIR/sanitizer_probe" -fsanitize=address,undefined >/dev/null 2>&1; then
+    if "$CC" $EFFECTIVE_CFLAGS "$BUILD_DIR/sanitizer_probe.c" -o "$BUILD_DIR/sanitizer_probe" -fsanitize=address,undefined >/dev/null 2>&1; then
         printf '%s\n' "-fsanitize=address,undefined"
         return 0
     fi
@@ -76,7 +96,7 @@ compile_lesson() {
     esac
 
     printf 'Compiling %s\n' "$lesson_path"
-    "$CC" $CFLAGS "$ROOT_DIR/$lesson_path" -o "$output_path" $extra_flags
+    "$CC" $EFFECTIVE_CFLAGS "$ROOT_DIR/$lesson_path" -o "$output_path" $extra_flags
 }
 
 fail_with_output() {
@@ -155,6 +175,7 @@ run_socket_check() {
     server_bin=$BUILD_DIR/26_simple_socket_server
     client_bin=$BUILD_DIR/26_simple_socket_client
     server_log=$BUILD_DIR/socket_server.log
+    permission_denied_bind=1
 
     for attempt in 1 2 3 4 5; do
         port=$((35000 + ($$ + attempt) % 20000))
@@ -182,7 +203,16 @@ run_socket_check() {
 
         wait "$SOCKET_SERVER_PID" >/dev/null 2>&1 || true
         SOCKET_SERVER_PID=
+
+        if ! grep -F "Bind failed: Operation not permitted" "$server_log" >/dev/null 2>&1; then
+            permission_denied_bind=0
+        fi
     done
+
+    if [ "$permission_denied_bind" = 1 ]; then
+        printf 'Skipping socket client/server regression check (environment does not permit binding a local listening socket).\n'
+        return 0
+    fi
 
     fail_with_output "Socket server/client regression test could not start successfully." "$(cat "$server_log")"
 }
@@ -236,7 +266,7 @@ run_sanitizer_regressions() {
     capstone_harness=$BUILD_DIR/capstone_parse_harness.c
     capstone_harness_bin=$BUILD_DIR/capstone_parse_harness
 
-    "$CC" $CFLAGS "$ROOT_DIR/Part 4 - The Expert Path_ Systems and Concurrency/30_multithreaded_file_analyzer.c" \
+    "$CC" $EFFECTIVE_CFLAGS "$ROOT_DIR/Part 4 - The Expert Path_ Systems and Concurrency/30_multithreaded_file_analyzer.c" \
         -o "$analyzer_san_bin" -pthread $SANITIZER_FLAGS
     : > "$empty_file"
     ASAN_OPTIONS=detect_leaks=0 UBSAN_OPTIONS=halt_on_error=1 "$analyzer_san_bin" "$empty_file" >/dev/null 2>&1
@@ -298,15 +328,42 @@ int main(void)
 }
 EOF
 
-    "$CC" $CFLAGS "$capstone_harness" -o "$capstone_harness_bin" "$NCURSES_FLAG" $SANITIZER_FLAGS
+    "$CC" $EFFECTIVE_CFLAGS "$capstone_harness" -o "$capstone_harness_bin" "$NCURSES_FLAG" $SANITIZER_FLAGS
     ASAN_OPTIONS=detect_leaks=0 UBSAN_OPTIONS=halt_on_error=1 "$capstone_harness_bin" >/dev/null 2>&1
 }
+
+case "$BASE_CFLAGS" in
+    *-std=*)
+        EFFECTIVE_CFLAGS=$BASE_CFLAGS
+        STANDARD_FLAG=$(printf '%s\n' "$BASE_CFLAGS" | awk '{
+            for (i = 1; i <= NF; i++)
+            {
+                if ($i ~ /^-std=/)
+                {
+                    print $i
+                    exit
+                }
+            }
+        }')
+        ;;
+    *)
+        STANDARD_FLAG=$(detect_standard_flag) || {
+            echo "Could not find a usable language standard flag (-std=c23 or -std=c17)." >&2
+            exit 1
+        }
+        EFFECTIVE_CFLAGS="$BASE_CFLAGS $STANDARD_FLAG"
+        ;;
+esac
 
 NCURSES_FLAG=$(detect_ncurses_flag) || {
     echo "Could not find a usable ncurses library (-lncursesw or -lncurses)." >&2
     exit 1
 }
 SANITIZER_FLAGS=$(detect_sanitizer_flags || true)
+
+printf 'Smoke check compiler: %s\n' "$CC"
+printf 'Smoke check standard: %s\n' "$STANDARD_FLAG"
+printf 'Smoke check flags: %s\n' "$EFFECTIVE_CFLAGS"
 
 (cd "$ROOT_DIR" && find . -type f -name '*.c' | sort > "$SOURCE_LIST")
 
@@ -327,7 +384,7 @@ done < "$SOURCE_LIST"
 
 printf 'Building %s\n' "$LESSON31_DIR"
 make -C "$LESSON31_DIR" clean >/dev/null
-make -C "$LESSON31_DIR" CC="$CC" CFLAGS="$CFLAGS" >/dev/null
+make -C "$LESSON31_DIR" CC="$CC" CFLAGS="$EFFECTIVE_CFLAGS" >/dev/null
 test -x "$LESSON31_DIR/31_project_main"
 make -C "$LESSON31_DIR" clean >/dev/null
 

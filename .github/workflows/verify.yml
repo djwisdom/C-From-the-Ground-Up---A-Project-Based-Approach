@@ -1,0 +1,44 @@
+name: verify
+
+on:
+  pull_request:
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  mdbook:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install mdBook
+        uses: taiki-e/install-action@v2
+        with:
+          tool: mdbook
+
+      - name: Build book
+        run: mdbook build
+
+  smoke-check:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler:
+          - clang
+          - gcc
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install ncurses headers
+        run: sudo apt-get update && sudo apt-get install --yes libncurses-dev
+
+      - name: Run smoke check
+        env:
+          CC: ${{ matrix.compiler }}
+        run: sh scripts/smoke_check.sh

@@ -40,28 +40,39 @@ The book is organized into five progressive parts:
 Most lessons are single-file programs. Pick one `.c` file, compile it, and run it:
 
 ```sh
-cc -Wall -Wextra -std=c11 \
+cc -Wall -Wextra -std=c23 \
   "Part 1 - The Beginner Path_ Core Concepts/1_hello_world.c" \
   -o /tmp/1_hello_world
 
 /tmp/1_hello_world
 ```
 
+If your compiler does not support `-std=c23` yet, use `-std=c17`.
+
 ## Build Notes
 
-- Most lessons compile with `cc -Wall -Wextra -std=c11 lesson.c -o lesson_name`.
+- The repo-level verification baseline prefers `-std=c23` and falls back to `-std=c17` when a compiler does not yet accept C23.
+- Most lessons compile with `cc -Wall -Wextra -Wpedantic -Wstrict-prototypes -std=c23 lesson.c -o lesson_name`.
 - Lessons 26 through 30 use POSIX APIs (sockets, `fork`, `waitpid`, `pthread`).
 - Lesson 30 needs `-pthread`.
 - Lesson 32 needs `-lm`.
-- Lessons 33 and 35 need `-lncurses`.
+- Lessons 33 and 35 need `-lncurses` or `-lncursesw`, depending on your system.
 
 ## Verification
 
-A repo-level smoke check is included:
+The supported verification flow is:
 
 ```sh
-sh scripts/smoke_check.sh
+mdbook build
+CC=clang sh scripts/smoke_check.sh
+CC=gcc sh scripts/smoke_check.sh
 ```
+
+If your local GCC is versioned, use that compiler name instead, for example
+`CC=gcc-15 sh scripts/smoke_check.sh`.
+
+GitHub Actions mirrors that verification path with `mdbook build` plus the
+smoke check under both Clang and GCC.
 
 ## License
 
